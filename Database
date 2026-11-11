@@ -1,0 +1,46 @@
+CREATE DATABASE IF NOT EXISTS skillswap;
+USE skillswap;
+
+CREATE TABLE IF NOT EXISTS students (
+    student_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    full_name VARCHAR(100) NOT NULL,
+    college_email VARCHAR(150) NOT NULL UNIQUE,
+    department VARCHAR(100) NOT NULL,
+    study_year INT NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE student_skills (
+    skill_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id BIGINT NOT NULL,
+    skill_name VARCHAR(100) NOT NULL,
+    skill_type ENUM('TEACH', 'LEARN') NOT NULL,
+    proficiency VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_student_skills_student
+        FOREIGN KEY (student_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS skill_exchange_requests (
+    request_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    sender_id BIGINT NOT NULL,
+    receiver_id BIGINT NOT NULL,
+    status ENUM('PENDING', 'ACCEPTED', 'REJECTED')
+        NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_request_sender
+        FOREIGN KEY (sender_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_request_receiver
+        FOREIGN KEY (receiver_id)
+        REFERENCES students(student_id)
+        ON DELETE CASCADE
+);
+ALTER TABLE skill_exchange_requests
+    ADD COLUMN sender_teach_skill_id BIGINT NULL,
+    ADD COLUMN sender_learn_skill_id BIGINT NULL;
