@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Students | SkillSwap</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+        }
+
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 42px 24px 60px;
+        }
+
+        .hero {
+            background: var(--blue);
+            padding: 36px;
+            border-radius: 22px;
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            color: #315B74;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 42px);
+            margin: 12px 0;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: #435568;
+            line-height: 1.7;
+            max-width: 620px;
+            margin-bottom: 0;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0 18px;
+            flex-wrap: wrap;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 23px;
+        }
+
+        .count {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 20px;
+        }
+
+        .student-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            box-shadow: 0 5px 18px rgba(31, 41, 55, 0.035);
+        }
+
+        .student-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: var(--coral);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            font-weight: 800;
+            color: #713D32;
+            flex-shrink: 0;
+        }
+
+        .student-name {
+            margin: 0 0 5px;
+            font-size: 18px;
+            overflow-wrap: anywhere;
+        }
+
+        .student-meta {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .skill-section {
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+            margin-top: 15px;
+        }
+
+        .skill-label {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .teach-label {
+            color: #34745B;
+        }
+
+        .learn-label {
+            color: #A45B49;
+        }
+
+        .skill-tags {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .skill-tag {
+            background: #F1F4F3;
+            border: 1px solid #DDE8E1;
+            color: #355B4C;
+            padding: 7px 10px;
+            border-radius: 9px;
+            font-size: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .learn-tag {
+            background: #FFF1EB;
+            border-color: #F3D9CF;
+            color: #97513F;
+        }
+
+        .muted {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .empty-state {
+            background: var(--white);
+            border: 1px dashed #D7CBBE;
+            border-radius: 18px;
+            text-align: center;
+            padding: 48px 20px;
+        }
+
+        .empty-icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            margin-bottom: 8px;
+        }
+
+        .primary-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 12px 19px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        .primary-btn:hover {
+            background: #984A39;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 5%;
+            }
+
+            main {
+                padding: 25px 16px 40px;
+            }
+
+            .hero {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a class="logo" href="/">Skill<span>Swap.</span></a>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/skills">My Skills</a>
+        <a href="/discover">Discover</a>
+        <a href="/matches">My Matches</a>
+        <a href="/requests">Requests</a>
+        <a href="/my-exchanges">My Exchanges</a>
+        <a href="/">Logout</a>
+    </div>
+</nav>
+
+<main>
+
+    <section class="hero">
+        <div class="eyebrow">Your campus. Your community.</div>
+        <h1>Discover your next skill partner.</h1>
+        <p>
+            Meet fellow students, explore what they can teach you,
+            and find out what they want to learn. Your next collaboration
+            could start here.
+        </p>
+    </section>
+
+    <div class="section-heading">
+        <h2>Students on SkillSwap</h2>
+        <span class="count">
+            <span th:text="${students.size()}">0</span> students found
+        </span>
+    </div>
+
+    <div class="student-grid" th:if="${!#lists.isEmpty(students)}">
+
+        <article class="student-card" th:each="student : ${students}">
+
+            <div class="student-top">
+                <div class="avatar">
+                    <span th:text="${#strings.substring(student['full_name'], 0, 1).toUpperCase()}">S</span>
+                </div>
+
+                <div>
+                    <h3 class="student-name"
+                        th:text="${student['full_name']}">Student Name</h3>
+
+                    <p class="student-meta">
+                        <span th:text="${student['department']}">Department</span>
+                        · Year <span th:text="${student['study_year']}">2</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-label teach-label">CAN TEACH</div>
+
+                <div class="skill-tags"
+                     th:if="${student['teach_skills'] != null}">
+                    <span class="skill-tag"
+                          th:each="skill : ${#strings.arraySplit(student['teach_skills'].toString(), ', ')}"
+                          th:text="${skill}">Java</span>
+                </div>
+
+                <p class="muted"
+                   th:if="${student['teach_skills'] == null}">
+                    No teaching skills listed yet.
+                </p>
+            </div>
+
+            <div class="skill-section">
+                <div class="skill-label learn-label">WANTS TO LEARN</div>
+
+                <div class="skill-tags"
+                     th:if="${student['learn_skills'] != null}">
+                    <span class="skill-tag learn-tag"
+                          th:each="skill : ${#strings.arraySplit(student['learn_skills'].toString(), ', ')}"
+                          th:text="${skill}">Python</span>
+                </div>
+
+                <p class="muted"
+                   th:if="${student['learn_skills'] == null}">
+                    No learning interests listed yet.
+                </p>
+            </div>
+
+        </article>
+
+    </div>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(students)}">
+        <div class="empty-icon">🤝</div>
+        <h3>Your skill community starts here.</h3>
+        <p class="muted">
+            There are no other registered students to discover yet.
+            Ask a friend to join SkillSwap and list their skills.
+        </p>
+        <a href="/skills" class="primary-btn">Manage My Skills</a>
+    </section>
+
+</main>
+
+</body>
+</html>

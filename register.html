@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join SkillSwap</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #F6F1E9;
+            color: #1F2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 440px;
+            padding: 32px;
+            border-radius: 18px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 25px #1f29371a;
+        }
+
+        h1 { margin-bottom: 8px; }
+        .subtitle { color: #64748b; margin-bottom: 24px; }
+
+        label {
+            display: block;
+            margin: 15px 0 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            background: #F7A994;
+            color: #1F2937;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover { opacity: 0.88; }
+        .error { color: #b91c1c; font-size: 13px; }
+        a { color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Join SkillSwap</h1>
+        <p class="subtitle">Learn together. Grow together.</p>
+
+        <form th:action="@{/register}" method="post">
+            <label for="fullName">Full name</label>
+            <input id="fullName" name="fullName"
+                   type="text" required maxlength="100">
+
+            <label for="collegeEmail">College email</label>
+            <input id="collegeEmail" name="collegeEmail"
+                   type="email" required maxlength="150">
+
+            <label for="department">Department</label>
+            <input id="department" name="department"
+                   type="text" required maxlength="100">
+
+            <label for="studyYear">Study year</label>
+            <select id="studyYear" name="studyYear" required>
+                <option value="">Select year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+            </select>
+
+            <label for="password">Password</label>
+            <input id="password" name="password"
+                   type="password" required minlength="8">
+
+            <button type="submit">Create Account</button>
+        </form>
+    </div>
+</body>
+</html>

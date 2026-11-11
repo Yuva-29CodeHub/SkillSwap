@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Matches | SkillSwap</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+            --success-bg: #E8F3E9;
+            --success-text: #28643B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--ink);
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        /* Main layout */
+        main {
+            max-width: 1180px;
+            margin: auto;
+            padding: 38px 24px 45px;
+        }
+
+        .welcome {
+            background: var(--blue);
+            padding: 36px;
+            border-radius: 22px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #315B74;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .welcome h1 {
+            font-size: clamp(30px, 5vw, 42px);
+            margin: 12px 0;
+            letter-spacing: -1px;
+        }
+
+        .welcome p {
+            color: #435568;
+            line-height: 1.7;
+            max-width: 720px;
+            margin: 0;
+        }
+
+        .section-heading {
+            font-size: 23px;
+            margin: 30px 0 16px;
+        }
+
+        /* Feedback messages */
+        .flash-message {
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .flash-success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid #C9E3CD;
+        }
+
+        .flash-error {
+            background: #FBE9E5;
+            color: #913E30;
+            border: 1px solid #F1C7BC;
+        }
+
+        /* Match cards */
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(min(100%, 285px), 1fr)
+            );
+            gap: 20px;
+        }
+
+        .match-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(31, 41, 55, 0.07);
+        }
+
+        .match-card h2 {
+            margin: 0 0 8px;
+            font-size: 21px;
+            overflow-wrap: anywhere;
+        }
+
+        .student-meta {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0 0 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Skills */
+        .skill-box {
+            background: #F8F6F1;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 15px;
+            margin-top: 12px;
+        }
+
+        .skill-label {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .skill-name {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+            margin: 0;
+        }
+
+        /* Exchange status */
+        .status {
+            padding: 12px;
+            margin-top: 14px;
+            border-radius: 10px;
+            background: #FFF0EB;
+            color: var(--accent);
+            text-align: center;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .status.accepted {
+            background: var(--success-bg);
+            color: var(--success-text);
+        }
+
+        .status.pending {
+            background: #FFF4DF;
+            color: #805A18;
+        }
+
+        .status.rejected {
+            background: #FBE9E5;
+            color: #913E30;
+        }
+
+        /* Actions */
+        .card-actions {
+            margin-top: auto;
+            padding-top: 16px;
+        }
+
+        .primary-btn {
+            display: block;
+            width: 100%;
+            margin-top: 10px;
+            padding: 13px 15px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            background: var(--accent);
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            background: #984A39;
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            background: var(--blue);
+            color: var(--ink);
+            border-color: #A9C8DA;
+        }
+
+        .secondary-btn:hover:not(:disabled) {
+            background: #A9C8DA;
+        }
+
+        .primary-btn:focus-visible,
+        .nav-links a:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
+        /* Empty state */
+        .empty-state {
+            background: var(--white);
+            border: 1px dashed #D8CFC2;
+            border-radius: 18px;
+            padding: 40px 25px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 58px;
+            height: 58px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: var(--blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+        }
+
+        .empty-state h2 {
+            margin: 0 0 10px;
+            font-size: 21px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 22px 15px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        /* Responsive layout */
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 5%;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            main {
+                padding: 25px 16px 40px;
+            }
+
+            .welcome {
+                padding: 25px;
+            }
+
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .match-card {
+                padding: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a th:href="@{/dashboard}" class="logo">Skill<span>Swap</span></a>
+
+    <div class="nav-links">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/skills}">My Skills</a>
+        <a th:href="@{/discover}">Discover</a>
+        <a th:href="@{/matches}" class="active">My Matches</a>
+        <a th:href="@{/requests}">Requests</a>
+        <a th:href="@{/my-exchanges}">My Exchanges</a>
+        <a th:href="@{/}">Logout</a>
+    </div>
+</nav>
+
+<main>
+    <section class="welcome">
+        <div class="eyebrow">Find your learning partner</div>
+        <h1>Your Skill Matches</h1>
+        <p>
+            Connect with students who can teach what you want to learn
+            and want to learn what you can teach. Start an exchange
+            when you're ready.
+        </p>
+    </section>
+
+    <!-- Feedback messages -->
+    <div th:if="${requestMessage != null}"
+         class="flash-message flash-success"
+         th:text="${requestMessage}">
+        Request update
+    </div>
+
+    <div th:if="${successMessage != null}"
+         class="flash-message flash-success"
+         th:text="${successMessage}">
+        Success
+    </div>
+
+    <div th:if="${errorMessage != null}"
+         class="flash-message flash-error"
+         th:text="${errorMessage}">
+        Error
+    </div>
+
+    <h2 class="section-heading">Students Who Match Your Skills</h2>
+
+    <!-- No matches -->
+    <div th:if="${matches == null or matches.isEmpty()}"
+         class="empty-state">
+        <div class="empty-icon">↔</div>
+        <h2>No reciprocal matches yet</h2>
+        <p>
+            Add both teaching and learning skills to discover
+            students whose skills complement yours.
+        </p>
+        <a th:href="@{/skills}" class="primary-btn"
+           style="max-width: 220px; margin: 20px auto 0;">
+            Manage My Skills
+        </a>
+    </div>
+
+    <!-- Matches -->
+    <section class="matches-grid"
+             th:if="${matches != null and !matches.isEmpty()}">
+
+        <article class="match-card" th:each="match : ${matches}">
+
+            <h2 th:text="${match['full_name']}">Student Name</h2>
+
+            <p class="student-meta">
+                <span th:text="${match['department']}">CSE</span>
+                <span> · Year </span>
+                <span th:text="${match['study_year']}">2</span>
+            </p>
+
+            <div class="skill-box">
+                <span class="skill-label">You want to learn</span>
+                <p class="skill-name"
+                   th:text="${match['skill_you_want_to_learn']}">
+                    Python
+                </p>
+            </div>
+
+            <div class="skill-box">
+                <span class="skill-label">You can teach</span>
+                <p class="skill-name"
+                   th:text="${match['skill_you_can_teach']}">
+                    Java
+                </p>
+            </div>
+
+            <div class="card-actions">
+
+                <!-- Accepted exchange -->
+                <div th:if="${match['exchange_accepted'] == 'ACCEPTED'}">
+                    <div class="status accepted">
+                        ✓ Exchange Accepted
+                    </div>
+                    <a th:href="@{/my-exchanges}"
+                       class="primary-btn secondary-btn">
+                        View My Exchanges
+                    </a>
+                </div>
+
+                <!-- Rejected exchange -->
+                <div th:if="${match['exchange_accepted'] == 'REJECTED'}">
+                    <div class="status rejected">
+                        ✕ Exchange Rejected
+                    </div>
+
+                    <form th:action="@{/requests/send}" method="post">
+                        <input type="hidden" name="receiverId"
+                               th:value="${match['student_id']}">
+                        <input type="hidden" name="myTeachSkillId"
+                               th:value="${match['my_teach_skill_id']}">
+                        <input type="hidden" name="myLearnSkillId"
+                               th:value="${match['my_learn_skill_id']}">
+
+                        <button type="submit" class="primary-btn">
+                            Send Exchange Request Again →
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Pending request -->
+                <div th:if="${match['exchange_accepted'] == 'PENDING'
+                             and match['pending_request_id'] != null}">
+
+                    <div th:if="${match['pending_request_sender_id'] != null
+                                 and match['pending_request_sender_id'].toString()
+                                     == match['current_student_id'].toString()}">
+
+                        <div class="status pending">
+                            Request Sent — Pending
+                        </div>
+
+                        <form th:action="@{/requests/cancel}" method="post">
+                            <input type="hidden" name="requestId"
+                                   th:value="${match['pending_request_id']}">
+
+                            <button type="submit" class="primary-btn">
+                                Cancel Request
+                            </button>
+                        </form>
+                    </div>
+
+                    <div th:if="${match['pending_request_sender_id'] != null
+                                 and match['pending_request_sender_id'].toString()
+                                     != match['current_student_id'].toString()}">
+
+                        <div class="status">
+                            Incoming Request
+                        </div>
+
+                        <a th:href="@{/requests}" class="primary-btn">
+                            View Incoming Request
+                        </a>
+                    </div>
+                </div>
+
+                <!-- No request exists -->
+                <div th:if="${match['exchange_accepted'] == 'NO'}">
+                    <form th:action="@{/requests/send}" method="post">
+                        <input type="hidden" name="receiverId"
+                               th:value="${match['student_id']}">
+                        <input type="hidden" name="myTeachSkillId"
+                               th:value="${match['my_teach_skill_id']}">
+                        <input type="hidden" name="myLearnSkillId"
+                               th:value="${match['my_learn_skill_id']}">
+
+                        <button type="submit" class="primary-btn">
+                            Send Exchange Request →
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </article>
+    </section>
+</main>
+
+<footer>
+    SkillSwap · Learn together. Grow together.
+</footer>
+
+</body>
+</html>

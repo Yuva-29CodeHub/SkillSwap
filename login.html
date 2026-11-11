@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap - Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #F6F1E9;
+            color: #1F2937;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 340px;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px #00000015;
+        }
+
+        h2 {
+            color:#1F2937;
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+
+        input, button {
+            box-sizing: border-box;
+            width: 100%;
+            padding: 12px;
+            margin-top: 14px;
+            border-radius: 7px;
+            font-size: 15px;
+        }
+
+        input {
+            border: 1px solid #ccd4df;
+        }
+
+        button {
+            background: #B85F4B;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error { color: #c62828; }
+        .success { color: #237a43; }
+
+        a {
+            color: #173b70;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h2>Welcome Back!</h2>
+    <p>Login to your SkillSwap account</p>
+
+    <p class="error" th:if="${param.error}">
+        Invalid email or password.
+    </p>
+
+    <p class="success" th:if="${param.logout}">
+        You have logged out successfully.
+    </p>
+
+    <form th:action="@{/login}" method="post">
+
+        <input type="email"
+               name="username"
+               placeholder="College email"
+               autocomplete="username"
+               required>
+
+        <input type="password"
+               name="password"
+               placeholder="Password"
+               autocomplete="current-password"
+               required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <p>
+        New to SkillSwap?
+        <a th:href="@{/register}">Create an account</a>
+    </p>
+
+</div>
+</body>
+</html>

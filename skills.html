@@ -1,0 +1,567 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap | My Skills</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+            --soft-blue: #E3EDF3;
+            --soft-coral: #FCE4DC;
+            --green: #376B52;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .navbar {
+            max-width: 1180px;
+            margin: auto;
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 11px 18px;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--coral);
+            color: var(--ink);
+        }
+
+        .button-secondary {
+            background: var(--white);
+            border-color: var(--border);
+        }
+
+        .page {
+            max-width: 1124px;
+            margin: 20px auto 70px;
+            padding: 0 28px;
+        }
+
+        .hero {
+            background: var(--blue);
+            border-radius: 28px;
+            padding: 42px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: var(--white);
+            color: #31566B;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        h1 {
+            margin-top: 15px;
+            font-size: clamp(32px, 4vw, 46px);
+            line-height: 1.12;
+            letter-spacing: -1.8px;
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            color: #43576A;
+            margin-top: 12px;
+            max-width: 520px;
+        }
+
+        .hero-symbol {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            border-radius: 28px;
+            background: var(--white);
+            display: grid;
+            place-items: center;
+            font-size: 46px;
+            box-shadow: 0 12px 30px #31566B15;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .panel {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 28px;
+            min-width: 0;
+        }
+
+        .panel h2 {
+            font-size: 23px;
+            letter-spacing: -0.7px;
+        }
+
+        .panel-intro {
+            color: var(--muted);
+            font-size: 14px;
+            margin: 7px 0 23px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            background: #FFFEFC;
+            color: var(--ink);
+            font: inherit;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #789DB3;
+            box-shadow: 0 0 0 3px #BFD8E855;
+        }
+
+        .button-full {
+            width: 100%;
+            margin-top: 3px;
+        }
+
+        .message {
+            margin-top: 16px;
+            padding: 11px 13px;
+            border-radius: 11px;
+            font-size: 13px;
+        }
+
+        .success {
+            background: #E7F3EA;
+            color: var(--green);
+        }
+
+        .error {
+            background: var(--soft-coral);
+            color: #963F32;
+        }
+
+        .skill-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            height: 30px;
+            padding: 0 9px;
+            border-radius: 10px;
+            background: var(--soft-blue);
+            color: #31566B;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .list-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 6px;
+        }
+
+        .skills-list {
+            display: grid;
+            gap: 13px;
+            margin-top: 20px;
+        }
+
+        .skill-card {
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 17px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            background: #FFFEFC;
+        }
+
+        .skill-icon {
+            width: 45px;
+            height: 45px;
+            flex-shrink: 0;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: var(--soft-blue);
+            font-size: 21px;
+        }
+
+        .skill-card:nth-child(even) .skill-icon {
+            background: var(--soft-coral);
+        }
+
+        .skill-info {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .skill-name {
+            font-weight: 750;
+            overflow-wrap: anywhere;
+        }
+
+        .skill-meta {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .skill-tag {
+            display: inline-block;
+            border-radius: 30px;
+            padding: 5px 9px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .teach {
+            background: var(--soft-blue);
+            color: #31566B;
+        }
+
+        .learn {
+            background: var(--soft-coral);
+            color: #963F32;
+        }
+
+        .empty-state {
+            margin-top: 20px;
+            padding: 30px 18px;
+            text-align: center;
+            border: 1px dashed #D9D0C4;
+            border-radius: 16px;
+            background: #FFFEFC;
+        }
+
+        .empty-icon {
+            font-size: 34px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state h3 {
+            font-size: 16px;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 6px;
+        }
+
+        .bottom-link {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .bottom-link a {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 760px) {
+            .navbar {
+                padding: 18px 20px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: space-between;
+                gap: 10px;
+                font-size: 12px;
+            }
+
+            .page {
+                padding: 0 16px;
+                margin-top: 12px;
+            }
+
+            .hero {
+                padding: 28px 23px;
+                border-radius: 22px;
+            }
+
+            .hero-symbol {
+                display: none;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .skill-card {
+                align-items: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .skill-tag {
+                margin-left: 58px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+    <a class="brand" th:href="@{/}">Skill<span>Swap.</span></a>
+
+    <nav class="nav-links" aria-label="Main navigation">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/skills}">My Skills</a>
+    </nav>
+
+    <a class="button button-secondary" th:href="@{/dashboard}">
+        My profile
+    </a>
+</header>
+
+<main class="page">
+
+    <section class="hero">
+        <div>
+            <span class="eyebrow">LEARN · SHARE · GROW</span>
+            <h1>Your skills.<br><span>Your next connection.</span></h1>
+            <p>
+                Everyone has something to teach and something to learn.
+                Add your skills and take the first step towards learning together.
+            </p>
+        </div>
+
+        <div class="hero-symbol" aria-hidden="true">↔</div>
+    </section>
+
+    <div class="content-grid">
+
+        <section class="panel">
+            <h2>Add a skill</h2>
+            <p class="panel-intro">
+                Tell your fellow students what you can share or want to learn.
+            </p>
+
+            <form th:action="@{/skills}" method="post">
+
+                <div class="field">
+                    <label for="skillName">What skill?</label>
+                    <input
+                        type="text"
+                        id="skillName"
+                        name="skillName"
+                        placeholder="e.g. Java, Python, UI Design"
+                        maxlength="100"
+                        required>
+                </div>
+
+                <div class="field">
+                    <label for="skillType">What would you like to do?</label>
+                    <select id="skillType" name="skillType" required>
+                        <option value="TEACH">I can teach this</option>
+                        <option value="LEARN">I want to learn this</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="proficiency">Your current level</label>
+                    <select id="proficiency" name="proficiency" required>
+                        <option value="BEGINNER">Beginner</option>
+                        <option value="INTERMEDIATE">Intermediate</option>
+                        <option value="ADVANCED">Advanced</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="button button-primary button-full">
+                    + Add skill
+                </button>
+            </form>
+
+            <p class="message success"
+               th:if="${success}"
+               th:text="${success}"></p>
+
+            <p class="message error"
+               th:if="${error}"
+               th:text="${error}"></p>
+        </section>
+
+        <section class="panel">
+            <div class="list-heading">
+                <h2>My listed skills</h2>
+                <span class="skill-count"
+                      th:text="${skills != null ? #lists.size(skills) : 0}">0</span>
+            </div>
+
+            <p class="panel-intro">
+                Your growing collection of skills to share and discover.
+            </p>
+
+            <div class="empty-state"
+                 th:if="${skills == null or #lists.isEmpty(skills)}">
+                <div class="empty-icon">🌱</div>
+                <h3>Your learning journey starts here</h3>
+                <p>
+                    You haven't listed any skills yet.
+                    Add your first skill using the form.
+                </p>
+            </div>
+
+            <div class="skills-list"
+                 th:if="${skills != null and !#lists.isEmpty(skills)}">
+
+                <article class="skill-card" th:each="skill : ${skills}">
+                    <div class="skill-icon"
+                         th:text="${skill['skill_type'] == 'TEACH' ? '📘' : '✏️'}">
+                        📘
+                    </div>
+
+                    <div class="skill-info">
+                        <div class="skill-name"
+                             th:text="${skill['skill_name']}">
+                            Java
+                        </div>
+
+                        <div class="skill-meta"
+                             th:text="${skill['proficiency']}">
+                            BEGINNER
+                        </div>
+                    </div>
+
+                    <span class="skill-tag"
+                          th:classappend="${skill['skill_type'] == 'TEACH' ? 'teach' : 'learn'}"
+                          th:text="${skill['skill_type'] == 'TEACH' ? 'CAN TEACH' : 'WANTS TO LEARN'}">
+                        CAN TEACH
+                    </span>
+                </article>
+
+            </div>
+        </section>
+
+    </div>
+
+    <div class="bottom-link">
+        Finished here?
+        <a th:href="@{/dashboard}">Return to your dashboard →</a>
+    </div>
+
+</main>
+
+<footer>
+    SkillSwap · Learn together, grow together.
+</footer>
+
+</body>
+</html>

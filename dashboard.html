@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SkillSwap</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+        }
+
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 1180px;
+            margin: auto;
+            padding: 38px 24px 60px;
+        }
+
+        .welcome {
+            background: var(--blue);
+            padding: 36px;
+            border-radius: 22px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #315B74;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 42px);
+            margin: 12px 0;
+            letter-spacing: -1px;
+        }
+
+        .welcome p {
+            color: #435568;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 23px;
+            margin: 30px 0 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .feature-card {
+            display: block;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            text-decoration: none;
+            color: var(--ink);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(31, 41, 55, 0.07);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #E3EDF3;
+            border-radius: 14px;
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        .feature-card:nth-child(2) .feature-icon {
+            background: #FCE3DA;
+        }
+
+        .feature-card:nth-child(3) .feature-icon {
+            background: #E4EDE4;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 9px;
+            font-size: 19px;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.65;
+            margin: 0 0 18px;
+        }
+
+        .card-link {
+            color: var(--accent);
+            font-weight: 750;
+            font-size: 14px;
+        }
+
+        .profile-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 25px;
+            margin-top: 28px;
+        }
+
+        .profile-card h2 {
+            font-size: 21px;
+            margin-top: 0;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 20px;
+        }
+
+        .profile-label {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 7px;
+        }
+
+        .profile-value {
+            font-size: 15px;
+            font-weight: 650;
+            overflow-wrap: anywhere;
+        }
+
+        .logout {
+            display: inline-block;
+            margin-top: 25px;
+            background: var(--accent);
+            color: white !important;
+            padding: 11px 17px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .logout:hover {
+            background: #984A39;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 5%;
+            }
+
+            main {
+                padding: 25px 16px 40px;
+            }
+
+            .welcome {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a class="logo" href="/">Skill<span>Swap.</span></a>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard" class="active">Dashboard</a>
+        <a href="/skills">My Skills</a>
+        <a href="/discover">Discover</a>
+        <a href="/matches">My Matches</a>
+        <a href="/requests">Requests</a>
+        <a href="/my-exchanges">My Exchanges</a>
+        <a href="/">Logout</a>
+    </div>
+</nav>
+
+<main>
+
+    <section class="welcome">
+        <div class="eyebrow">Your SkillSwap space</div>
+
+        <h1>
+            Welcome back,
+            <span th:text="${student['full_name']}">Student</span>!
+        </h1>
+
+        <p>
+            Your next skill exchange starts here.
+            Share what you know, discover what others can teach,
+            and grow together with your campus community.
+        </p>
+    </section>
+
+    <h2 class="section-title">What would you like to do?</h2>
+
+    <div class="feature-grid">
+
+        <a href="/skills" class="feature-card">
+            <div class="feature-icon">✦</div>
+            <h3>My Skills</h3>
+            <p>
+                Add the skills you can teach and the skills you want
+                to learn. Keep your learning profile updated.
+            </p>
+            <span class="card-link">Manage my skills →</span>
+        </a>
+
+        <a href="/discover" class="feature-card">
+            <div class="feature-icon">♧</div>
+            <h3>Discover Students</h3>
+            <p>
+                Explore other students, see what they can teach,
+                and find people with complementary skills.
+            </p>
+            <span class="card-link">Explore students →</span>
+        </a>
+
+        <a href="/#how-it-works" class="feature-card">
+            <div class="feature-icon">↗</div>
+            <h3>How SkillSwap Works</h3>
+            <p>
+                Learn how SkillSwap brings students together
+                through sharing, collaboration, and peer learning.
+            </p>
+            <span class="card-link">Learn more →</span>
+        </a>
+
+    </div>
+
+    <section class="profile-card">
+        <h2>Your student profile</h2>
+
+        <div class="profile-grid">
+            <div>
+                <span class="profile-label">Full name</span>
+                <span class="profile-value"
+                      th:text="${student['full_name']}">Student Name</span>
+            </div>
+
+            <div>
+                <span class="profile-label">College email</span>
+                <span class="profile-value"
+                      th:text="${student['college_email']}">student@example.com</span>
+            </div>
+
+            <div>
+                <span class="profile-label">Department</span>
+                <span class="profile-value"
+                      th:text="${student['department']}">CSE</span>
+            </div>
+
+            <div>
+                <span class="profile-label">Study year</span>
+                <span class="profile-value"
+                      th:text="${student['study_year']}">2</span>
+            </div>
+        </div>
+
+        <a href="/login" class="logout">Log out</a>
+    </section>
+
+</main>
+
+</body>
+</html>

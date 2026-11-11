@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Exchanges | SkillSwap</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+        }
+
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent);
+        }
+
+        main {
+            max-width: 1180px;
+            margin: auto;
+            padding: 38px 24px 60px;
+        }
+
+        .welcome {
+            background: var(--blue);
+            padding: 36px;
+            border-radius: 22px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #315B74;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 42px);
+            margin: 12px 0;
+            letter-spacing: -1px;
+        }
+
+        .welcome p {
+            color: #435568;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 23px;
+            margin: 30px 0 16px;
+        }
+
+        .exchange-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 18px;
+        }
+
+        .exchange-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .exchange-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(31, 41, 55, 0.07);
+        }
+
+        .exchange-card h2 {
+            margin: 0 0 8px;
+            font-size: 21px;
+        }
+
+        .student-meta {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin: 0 0 20px;
+        }
+
+        .status {
+            display: inline-block;
+            background: #E4EDE4;
+            color: #315B43;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .skill-box {
+            background: #F8F6F1;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            padding: 15px;
+            margin-top: 12px;
+        }
+
+        .skill-label {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .skill-name {
+            font-size: 16px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-state {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .primary-link {
+            display: inline-block;
+            margin-top: 10px;
+            background: var(--accent);
+            color: var(--white);
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .primary-link:hover {
+            background: #984A39;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 16px 5%;
+            }
+
+            main {
+                padding: 25px 16px 40px;
+            }
+
+            .welcome {
+                padding: 25px;
+            }
+
+            .exchange-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a href="/dashboard" class="logo">Skill<span>Swap</span></a>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/skills">My Skills</a>
+        <a href="/discover">Discover</a>
+        <a href="/matches">My Matches</a>
+        <a href="/requests">Requests</a>
+        <a href="/my-exchanges" class="active">My Exchanges</a>
+        <a href="/">Logout</a>
+    </div>
+</nav>
+
+<main>
+    <section class="welcome">
+        <div class="eyebrow">YOUR LEARNING JOURNEY</div>
+        <h1>My Exchanges</h1>
+        <p>
+            Learn together, share what you know, and grow your skills
+            through meaningful student-to-student exchanges.
+        </p>
+    </section>
+
+    <h2 class="section-title">Accepted Exchanges</h2>
+
+    <div class="exchange-grid" th:if="${not #lists.isEmpty(exchanges)}">
+        <article class="exchange-card" th:each="exchange : ${exchanges}">
+
+            <span class="status">✓ Exchange Accepted</span>
+
+            <h2 th:text="${exchange['other_name']}">Student Name</h2>
+
+            <p class="student-meta">
+                <span th:text="${exchange['department']}">Department</span>
+                <span> · Year </span>
+                <span th:text="${exchange['study_year']}">Year</span>
+            </p>
+
+            <div class="skill-box">
+                <span class="skill-label">They teach you</span>
+                <div class="skill-name"
+                     th:text="${exchange['skill_they_teach']}">
+                    Skill they teach
+                </div>
+            </div>
+
+            <div class="skill-box">
+                <span class="skill-label">You teach them</span>
+                <div class="skill-name"
+                     th:text="${exchange['skill_i_teach']}">
+                    Skill you teach
+                </div>
+            </div>
+                        <div class="skill-box">
+                <span class="skill-label">College Email</span>
+                <div class="skill-name"
+                     th:text="${exchange['other_email']}">
+                    student@college.edu
+                </div>
+                <a class="primary-link"
+                   th:href="'https://mail.google.com/mail/?view=cm&fs=1&to=' + ${exchange['other_email']}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Contact via Gmail
+                </a>
+            </div>
+
+
+        </article>
+    </div>
+
+    <div class="empty-state" th:if="${#lists.isEmpty(exchanges)}">
+        <h2>No accepted exchanges yet</h2>
+        <p>
+            When you and another student accept an exchange,
+            it will appear here along with the skills you will share.
+        </p>
+        <a href="/matches" class="primary-link">Explore My Matches</a>
+    </div>
+</main>
+
+</body>
+</html>

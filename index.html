@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillSwap | Learn Together</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                         sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .navbar {
+            max-width: 1180px;
+            margin: auto;
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .brand span {
+            color: #B85F4B;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: #B85F4B;
+        }
+
+        .button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 12px 19px;
+            font: inherit;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button-primary {
+            background: var(--coral);
+            color: var(--ink);
+        }
+
+        .button-secondary {
+            background: var(--white);
+            border-color: var(--border);
+        }
+
+        .hero {
+            max-width: 1180px;
+            margin: 22px auto 0;
+            padding: 54px 28px 72px;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 64px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            background: #E3EDF3;
+            color: #31566B;
+            padding: 7px 13px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 750;
+            letter-spacing: 0.4px;
+        }
+
+        h1 {
+            margin-top: 23px;
+            font-size: clamp(42px, 5vw, 66px);
+            line-height: 1.08;
+            letter-spacing: -2.8px;
+            max-width: 620px;
+        }
+
+        h1 span {
+            color: #B85F4B;
+        }
+
+        .hero-copy {
+            margin-top: 22px;
+            max-width: 490px;
+            color: var(--muted);
+            font-size: 17px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .trust-note {
+            margin-top: 22px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .illustration {
+            background: var(--blue);
+            min-height: 355px;
+            border-radius: 30px;
+            padding: 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .orbit {
+            width: 235px;
+            height: 235px;
+            border: 1px dashed #789DB3;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .center-card {
+            width: 155px;
+            height: 155px;
+            background: var(--white);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px #31566B20;
+            text-align: center;
+        }
+
+        .center-icon {
+            font-size: 42px;
+            margin-bottom: 5px;
+        }
+
+        .center-card strong {
+            font-size: 15px;
+        }
+
+        .center-card small {
+            color: var(--muted);
+        }
+
+        .floating-card {
+            position: absolute;
+            background: var(--white);
+            padding: 13px 16px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px #1F293712;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .floating-card small {
+            display: block;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .card-one {
+            top: 30px;
+            left: 18px;
+        }
+
+        .card-two {
+            right: 16px;
+            bottom: 30px;
+        }
+
+        .section {
+            background: var(--white);
+            padding: 65px 28px;
+        }
+
+        .section-inner {
+            max-width: 1124px;
+            margin: auto;
+        }
+
+        .section-heading {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 35px;
+        }
+
+        .section-heading h2 {
+            font-size: 32px;
+            letter-spacing: -1px;
+        }
+
+        .section-heading p {
+            margin-top: 10px;
+            color: var(--muted);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .feature {
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .feature-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: #E3EDF3;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .feature:nth-child(2) .feature-icon {
+            background: #FCE4DC;
+        }
+
+        .feature:nth-child(3) .feature-icon {
+            background: #F1E9DA;
+        }
+
+        .feature h3 {
+            font-size: 17px;
+        }
+
+        .feature p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        footer {
+            padding: 25px 28px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        @media (max-width: 760px) {
+            .navbar {
+                padding: 18px 20px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links {
+                order: 3;
+                width: 100%;
+                justify-content: space-between;
+                gap: 12px;
+                font-size: 12px;
+            }
+
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 38px 20px 48px;
+                gap: 35px;
+            }
+
+            h1 {
+                letter-spacing: -1.7px;
+            }
+
+            .illustration {
+                min-height: 310px;
+            }
+
+            .section {
+                padding: 48px 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="navbar">
+        <a class="brand" href="/">Skill<span>Swap.</span></a>
+
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#how-it-works">How it works</a>
+            <a href="#why-skillswap">Why SkillSwap</a>
+            <a href="#why-skillswap">Safety</a>
+        </nav>
+
+        <a class="button button-secondary" href="/login">
+    Sign in →
+</a>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div>
+                <span class="eyebrow">A BETTER WAY TO LEARN TOGETHER</span>
+
+                <h1>
+                    You know something.
+                    <span>Someone needs it.</span>
+                </h1>
+
+                <p class="hero-copy">
+                    Learn from fellow students, share what you know,
+                    and build confidence together. No tutoring fees.
+                    No pressure to be perfect.
+                </p>
+
+                <div class="hero-actions">
+                    <a class="button button-primary" href="/login">
+                        Find your learning partner ↗
+                    </a>
+
+                    <a class="button button-secondary" href="#why-skillswap">
+                        Discover how it works
+                    </a>
+                </div>
+
+                <p class="trust-note">
+                    Your pace. Your goals. Your choice of learning partner.
+                </p>
+            </div>
+
+            <div class="illustration" aria-label="Illustration of students exchanging skills">
+                <div class="orbit">
+                    <div class="center-card">
+                        <div class="center-icon">↔</div>
+                        <strong>SkillSwap</strong>
+                        <small>Learn · Share · Grow</small>
+                    </div>
+                </div>
+
+                <div class="floating-card card-one">
+                    📘 Java
+                    <small>Something to share</small>
+                </div>
+
+                <div class="floating-card card-two">
+                    ✏️ Mathematics
+                    <small>Something to learn</small>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="how-it-works">
+            <div class="section-inner">
+                <div class="section-heading">
+                    <h2>Learning works better together.</h2>
+                    <p>
+                        You don't need to know everything.
+                        You just need something to share and something to learn.
+                    </p>
+                </div>
+
+                <div class="feature-grid" id="why-skillswap">
+                    <article class="feature">
+                        <div class="feature-icon">↔</div>
+                        <h3>Find your match</h3>
+                        <p>
+                            Discover students whose skills and learning
+                            goals complement yours.
+                        </p>
+                    </article>
+
+                    <article class="feature">
+                        <div class="feature-icon">♡</div>
+                        <h3>Learn without pressure</h3>
+                        <p>
+                            Ask questions, practise together, and learn
+                            at a pace that feels comfortable.
+                        </p>
+                    </article>
+
+                    <article class="feature">
+                        <div class="feature-icon">✓</div>
+                        <h3>Connect thoughtfully</h3>
+                        <p>
+                            Make informed choices about learning partners.
+                            Your comfort and privacy matter.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        SkillSwap · Learn together, grow together.
+    </footer>
+</body>
+</html>

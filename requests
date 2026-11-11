@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incoming Requests | SkillSwap</title>
+
+    <style>
+        :root {
+            --blue: #BFD8E8;
+            --coral: #F7A994;
+            --beige: #F6F1E9;
+            --ink: #1F2937;
+            --muted: #687386;
+            --white: #FFFFFF;
+            --border: #E7E0D6;
+            --accent: #B85F4B;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--beige);
+            color: var(--ink);
+        }
+
+        nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--ink);
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active { color: var(--accent); }
+
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 38px 24px 60px;
+        }
+
+        .hero {
+            background: var(--blue);
+            padding: 32px;
+            border-radius: 22px;
+            margin-bottom: 28px;
+        }
+
+        .eyebrow {
+            color: #315B74;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: clamp(30px, 5vw, 40px);
+            margin: 12px 0;
+        }
+
+        .hero p {
+            color: #435568;
+            line-height: 1.7;
+            margin-bottom: 0;
+        }
+
+        .request-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .student-name {
+            margin: 0 0 7px;
+            font-size: 19px;
+        }
+
+        .student-meta {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 18px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .accept {
+            background: var(--accent);
+            color: white;
+        }
+
+        .reject {
+            background: #F1E8E5;
+            color: #8A4034;
+        }
+
+        .empty-state {
+            background: var(--white);
+            border: 1px dashed #D7CBBE;
+            border-radius: 18px;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .empty-state p {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .notice {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            nav { padding: 16px 5%; }
+            main { padding: 25px 16px 40px; }
+            .hero { padding: 24px; }
+            .request-card { padding: 20px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <a class="logo" href="/">Skill<span>Swap.</span></a>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/skills">My Skills</a>
+        <a href="/discover">Discover</a>
+        <a href="/matches">My Matches</a>
+        <a href="/requests" class="active">Requests</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main>
+
+    <section class="hero">
+        <div class="eyebrow">Your learning community</div>
+        <h1>Incoming requests.</h1>
+        <p>Review students who want to exchange skills with you.</p>
+    </section>
+
+    <p class="notice"
+       th:if="${requestMessage}"
+       th:text="${requestMessage}"></p>
+
+    <div th:if="${!#lists.isEmpty(requests)}">
+
+        <article class="request-card"
+                 th:each="request : ${requests}">
+
+            <div>
+                <h2 class="student-name"
+                    th:text="${request['full_name']}">Student Name</h2>
+
+                <p class="student-meta">
+                    <span th:text="${request['department']}">Department</span>
+                    · Year
+                    <span th:text="${request['study_year']}">2</span>
+                    <br>
+                    Status: <strong>PENDING</strong>
+                </p>
+            </div>
+
+            <div class="actions">
+                <form th:action="@{/requests/respond}" method="post">
+                    <input type="hidden"
+                           name="requestId"
+                           th:value="${request['request_id']}">
+                    <input type="hidden" name="decision" value="ACCEPTED">
+                    <button type="submit" class="btn accept">
+                        Accept
+                    </button>
+                </form>
+
+                <form th:action="@{/requests/respond}" method="post">
+                    <input type="hidden"
+                           name="requestId"
+                           th:value="${request['request_id']}">
+                    <input type="hidden" name="decision" value="REJECTED">
+                    <button type="submit" class="btn reject">
+                        Reject
+                    </button>
+                </form>
+            </div>
+
+        </article>
+
+    </div>
+
+    <section class="empty-state"
+             th:if="${#lists.isEmpty(requests)}">
+        <h2>No pending requests yet 🤝</h2>
+        <p>When another student requests a skill exchange, it will appear here.</p>
+        <a href="/matches"
+           style="color:#B85F4B;font-weight:700;text-decoration:none;">
+            Explore My Matches →
+        </a>
+    </section>
+
+</main>
+
+</body>
+</html>
